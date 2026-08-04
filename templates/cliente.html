@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Tienda | CrazyPrice</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+
+
+<body>
+
+
+<nav class="navbar">
+
+
+<h2>
+Crazy<span>Price</span>
+</h2>
+
+
+
+
+<div class="categories">
+
+
+<a href="/cliente">
+Inicio
+</a>
+
+
+<a href="/cliente/Caballero">
+Caballero
+</a>
+
+
+<a href="/cliente/Dama">
+Dama
+</a>
+
+
+<a href="/cliente/Niño">
+Niño
+</a>
+
+
+<a href="/cliente/Niña">
+Niña
+</a>
+
+
+</div>
+
+
+
+
+
+<div class="navbar-right">
+
+
+
+<a href="/carrito">
+
+
+🛒 Carrito
+
+
+{% set cantidad_carrito = namespace(total=0) %}
+
+
+{% for item in carrito %}
+
+
+{% set cantidad_carrito.total = cantidad_carrito.total + item.cantidad %}
+
+
+{% endfor %}
+
+
+
+<span class="cart-count" id="cart-count">
+
+{{ cantidad_carrito.total }}
+
+</span>
+
+
+
+</a>
+
+
+
+
+
+<a href="/logout">
+
+Cerrar sesión
+
+</a>
+
+
+
+</div>
+
+
+
+</nav>
+
+
+
+
+
+{% with mensajes = get_flashed_messages(with_categories=true) %}
+
+
+{% if mensajes %}
+
+
+{% for categoria, mensaje in mensajes %}
+
+
+
+<div class="alert {{ categoria }}">
+
+{{ mensaje }}
+
+</div>
+
+
+
+{% endfor %}
+
+
+{% endif %}
+
+
+{% endwith %}
+
+
+
+
+
+
+
+<section class="shop">
+
+
+
+<h1>
+Productos disponibles
+</h1>
+
+
+
+
+
+<div class="products">
+
+
+
+
+
+{% for producto in productos %}
+
+
+
+
+
+<div class="product">
+
+
+
+<a href="/producto/{{ producto.id }}" class="product-link">
+
+
+
+
+
+{% if producto.imagen.startswith('http') %}
+
+
+
+<img 
+src="{{ producto.imagen }}" 
+alt="{{ producto.nombre }}">
+
+
+
+{% else %}
+
+
+
+<img 
+src="{{ url_for('static', filename=producto.imagen) }}" 
+alt="{{ producto.nombre }}">
+
+
+
+{% endif %}
+
+
+
+
+
+
+
+<h3>
+
+{{ producto.nombre }}
+
+</h3>
+
+
+
+
+
+
+
+<p>
+
+{{ producto.descripcion }}
+
+</p>
+
+
+
+
+
+
+
+<h2>
+
+${{ producto.precio|int }}
+
+</h2>
+
+
+
+
+
+
+
+<p>
+
+Stock:
+{{ producto.stock }}
+
+</p>
+
+
+
+
+
+</a>
+
+
+
+
+
+
+<form method="POST" action="/agregar_carrito">
+
+
+
+
+
+<input
+type="hidden"
+name="id"
+value="{{ producto.id }}">
+
+
+
+
+
+
+<input
+type="hidden"
+name="producto"
+value="{{ producto.nombre }}">
+
+
+
+
+
+
+<input
+type="hidden"
+name="precio"
+value="{{ producto.precio }}">
+
+
+
+
+
+
+<input
+type="hidden"
+name="imagen"
+value="{{ producto.imagen }}">
+
+
+
+
+
+
+<input
+type="number"
+name="cantidad"
+value="1"
+min="1"
+max="{{ producto.stock }}"
+required>
+
+
+
+
+
+
+
+<button class="btn">
+
+🛒 Agregar al carrito
+
+</button>
+
+
+
+
+
+
+
+</form>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+{% endfor %}
+
+
+
+
+
+</div>
+
+
+
+
+
+</section>
+
+
+
+
+
+</body>
+
+
+</html>

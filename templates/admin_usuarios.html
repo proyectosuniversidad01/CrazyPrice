@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Usuarios | Admin CrazyPrice</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+<aside>
+
+
+<h2>
+Crazy<span>Price</span>
+</h2>
+
+
+<a href="/admin">
+📊 Dashboard
+</a>
+
+
+<a href="/admin/productos">
+👕 Productos
+</a>
+
+
+<a href="/admin/usuarios" class="active">
+👥 Usuarios
+</a>
+
+
+<a href="/admin/pedidos">
+📦 Pedidos
+</a>
+
+
+<a href="/logout">
+🚪 Cerrar sesión
+</a>
+
+
+</aside>
+
+
+
+
+
+
+<section class="main">
+
+
+<h1>
+Gestión de Usuarios
+</h1>
+
+
+<p>
+Usuarios registrados en el sistema
+</p>
+
+
+
+
+
+
+<div class="panel">
+
+
+<h2>
+Lista de usuarios
+</h2>
+
+
+
+<table>
+
+
+<tr>
+
+<th>
+ID
+</th>
+
+
+<th>
+Nombre
+</th>
+
+
+<th>
+Usuario
+</th>
+
+
+<th>
+Rol
+</th>
+
+
+</tr>
+
+
+
+
+{% for usuario in usuarios %}
+
+
+
+<tr>
+
+
+<td>
+
+{{usuario.id}}
+
+</td>
+
+
+
+<td>
+
+{{usuario.nombre}}
+
+</td>
+
+
+
+
+<td>
+
+{{usuario.usuario}}
+
+</td>
+
+
+
+
+<td>
+
+
+{% if usuario.rol == "admin" %}
+
+🛡️ Administrador
+
+{% else %}
+
+👤 Cliente
+
+{% endif %}
+
+
+
+</td>
+
+
+
+</tr>
+
+
+
+{% endfor %}
+
+
+
+</table>
+
+
+
+</div>
+
+
+
+
+
+
+</section>
+
+
+
+</div>
+
+
+</body>
+
+</html>

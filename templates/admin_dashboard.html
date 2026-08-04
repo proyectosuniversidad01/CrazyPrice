@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | CrazyPrice</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+
+    <!-- MENÚ LATERAL -->
+
+    <aside>
+
+
+        <div class="logo">
+
+            <h2>Crazy<span>Price</span></h2>
+
+        </div>
+
+
+        <nav>
+
+
+            <a href="/admin" class="active">
+                📊 Dashboard
+            </a>
+
+
+            <a href="/admin/productos">
+                👕 Productos
+            </a>
+
+
+            <a href="/admin/usuarios">
+                👥 Usuarios
+            </a>
+
+
+            <a href="/admin/pedidos">
+                📦 Pedidos
+            </a>
+
+
+            <a href="/logout">
+                🚪 Cerrar sesión
+            </a>
+
+
+        </nav>
+
+
+    </aside>
+
+
+
+
+
+    <!-- CONTENIDO -->
+
+
+    <main class="main">
+
+
+        <h1>
+            Dashboard
+        </h1>
+
+
+        <p>
+            Bienvenido al panel de administración de CrazyPrice.
+        </p>
+
+
+
+
+
+        <!-- TARJETAS -->
+
+
+        <div class="cards">
+
+
+
+            <div class="card">
+
+
+                <h3>
+                    Usuarios
+                </h3>
+
+
+                <h2>
+                    {{ usuarios|length }}
+                </h2>
+
+
+                <p>
+                    Usuarios registrados
+                </p>
+
+
+            </div>
+
+
+
+
+
+            <div class="card">
+
+
+                <h3>
+                    Pedidos
+                </h3>
+
+
+                <h2>
+                    {{ pedidos|length }}
+                </h2>
+
+
+                <p>
+                    Pedidos realizados
+                </p>
+
+
+            </div>
+
+
+
+
+
+            <div class="card">
+
+
+                <h3>
+                    Facturación
+                </h3>
+
+
+                <h2>
+                    ${{ "{:,.2f}".format(facturacion) }}
+                </h2>
+
+
+                <p>
+                    Ventas entregadas
+                </p>
+
+
+            </div>
+
+
+
+
+
+            <div class="card">
+
+
+                <h3>
+                    Sistema
+                </h3>
+
+
+                <h2>
+                    Activo
+                </h2>
+
+
+                <p>
+                    Servidor funcionando correctamente
+                </p>
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+        <!-- ACCESOS -->
+
+
+        <div class="panel">
+
+
+            <h2>
+                Accesos rápidos
+            </h2>
+
+
+
+            <div class="cards">
+
+
+
+                <div class="card">
+
+
+                    <h3>
+                        👕 Productos
+                    </h3>
+
+
+                    <p>
+                        Administra el catálogo de la tienda.
+                    </p>
+
+
+                    <a class="btn" href="/admin/productos">
+
+                        Administrar
+
+                    </a>
+
+
+                </div>
+
+
+
+
+
+                <div class="card">
+
+
+                    <h3>
+                        👥 Usuarios
+                    </h3>
+
+
+                    <p>
+                        Consulta todos los usuarios registrados.
+                    </p>
+
+
+                    <a class="btn" href="/admin/usuarios">
+
+                        Ver usuarios
+
+                    </a>
+
+
+                </div>
+
+
+
+
+
+                <div class="card">
+
+
+                    <h3>
+                        📦 Pedidos
+                    </h3>
+
+
+                    <p>
+                        Gestiona los pedidos realizados.
+                    </p>
+
+
+                    <a class="btn" href="/admin/pedidos">
+
+                        Ver pedidos
+
+                    </a>
+
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+
+        <!-- RESUMEN -->
+
+
+        <div class="panel">
+
+
+            <h2>
+                Resumen
+            </h2>
+
+
+
+
+            <table>
+
+
+                <tr>
+
+
+                    <th>
+                        Información
+                    </th>
+
+
+                    <th>
+                        Valor
+                    </th>
+
+
+                </tr>
+
+
+
+
+                <tr>
+
+
+                    <td>
+                        Usuarios registrados
+                    </td>
+
+
+                    <td>
+                        {{ usuarios|length }}
+                    </td>
+
+
+                </tr>
+
+
+
+
+
+                <tr>
+
+
+                    <td>
+                        Pedidos registrados
+                    </td>
+
+
+                    <td>
+                        {{ pedidos|length }}
+                    </td>
+
+
+                </tr>
+
+
+
+
+
+                <tr>
+
+
+                    <td>
+                        Facturación total
+                    </td>
+
+
+                    <td>
+                        ${{ "{:,.2f}".format(facturacion) }}
+                    </td>
+
+
+                </tr>
+
+
+
+
+
+                <tr>
+
+
+                    <td>
+                        Estado del sistema
+                    </td>
+
+
+                    <td>
+                        🟢 Operativo
+                    </td>
+
+
+                </tr>
+
+
+
+            </table>
+
+
+
+        </div>
+
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>

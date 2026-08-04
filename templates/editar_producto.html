@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Editar Producto | CrazyPrice</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+<aside>
+
+
+<h2>
+Crazy<span>Price</span>
+</h2>
+
+
+<a href="/admin">
+📊 Dashboard
+</a>
+
+
+<a href="/admin/productos" class="active">
+👕 Productos
+</a>
+
+
+<a href="/admin/usuarios">
+👥 Usuarios
+</a>
+
+
+<a href="/admin/pedidos">
+📦 Pedidos
+</a>
+
+
+<a href="/logout">
+🚪 Cerrar sesión
+</a>
+
+
+</aside>
+
+
+
+
+
+<section class="main">
+
+
+<h1>
+Editar Producto
+</h1>
+
+
+
+<div class="panel">
+
+
+
+<form method="POST" enctype="multipart/form-data">
+
+
+
+<label>
+Nombre
+</label>
+
+<input
+type="text"
+name="nombre"
+value="{{ producto.nombre }}"
+required>
+
+
+
+
+<label>
+Descripción
+</label>
+
+<input
+type="text"
+name="descripcion"
+value="{{ producto.descripcion }}">
+
+
+
+
+<label>
+Precio
+</label>
+
+<input
+type="number"
+step="0.01"
+name="precio"
+value="{{ producto.precio }}"
+required>
+
+
+
+
+<label>
+Stock
+</label>
+
+<input
+type="number"
+name="stock"
+value="{{ producto.stock }}"
+required>
+
+
+
+
+
+<label>
+Imagen actual
+</label>
+
+
+<br>
+
+
+<div 
+style="position:relative; width:150px;">
+
+
+
+{% if producto.imagen and producto.imagen.startswith('http') %}
+
+
+<img
+src="{{ producto.imagen }}"
+id="imagen-actual"
+width="150"
+style="border-radius:10px;">
+
+
+
+{% elif producto.imagen %}
+
+
+
+<img
+src="{{ url_for('static', filename=producto.imagen) }}"
+id="imagen-actual"
+width="150"
+style="border-radius:10px;">
+
+
+
+{% endif %}
+
+
+
+<button
+type="button"
+id="remove-current"
+style="
+position:absolute;
+top:-10px;
+right:-10px;
+border-radius:50%;
+background:red;
+color:white;
+border:none;
+width:25px;
+height:25px;
+cursor:pointer;
+">
+
+X
+
+</button>
+
+
+
+</div>
+
+
+
+<input
+type="hidden"
+name="eliminar_imagen"
+id="eliminar_imagen"
+value="0">
+
+
+
+
+
+<br><br>
+
+
+
+<label>
+Nueva imagen por URL
+</label>
+
+
+<input
+type="text"
+name="imagen"
+placeholder="https://ejemplo.com/imagen.jpg">
+
+
+
+
+
+<br><br>
+
+
+
+
+<label>
+Subir nueva imagen
+</label>
+
+
+
+<input
+type="file"
+id="archivo"
+name="archivo"
+accept="image/*">
+
+
+
+
+
+<div 
+id="preview-container"
+style="
+display:none;
+position:relative;
+width:150px;
+margin-top:15px;
+">
+
+
+
+<img
+id="preview"
+width="150"
+style="border-radius:10px;">
+
+
+
+<button
+type="button"
+id="remove-image"
+style="
+position:absolute;
+top:-10px;
+right:-10px;
+border-radius:50%;
+background:red;
+color:white;
+border:none;
+width:25px;
+height:25px;
+cursor:pointer;
+">
+
+X
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<br>
+
+
+
+<div style="text-align:center; margin-top:20px;">
+
+
+
+<button class="btn">
+
+Guardar cambios
+
+</button>
+
+
+
+<a class="btn-delete"
+href="/admin/productos"
+style="margin-left:15px;">
+
+Cancelar
+
+</a>
+
+
+
+</div>
+
+
+
+
+</form>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+</div>
+
+
+
+
+
+
+<script>
+
+
+// ==========================
+// VISTA PREVIA NUEVA IMAGEN
+// ==========================
+
+
+const inputImagen = document.getElementById("archivo");
+
+const preview = document.getElementById("preview");
+
+const container = document.getElementById("preview-container");
+
+const removeBtn = document.getElementById("remove-image");
+
+
+
+inputImagen.addEventListener("change", function(){
+
+
+    const archivo = this.files[0];
+
+
+    if(archivo){
+
+
+        const lector = new FileReader();
+
+
+        lector.onload = function(e){
+
+
+            preview.src = e.target.result;
+
+            container.style.display = "block";
+
+
+        }
+
+
+        lector.readAsDataURL(archivo);
+
+
+    }
+
+
+});
+
+
+
+
+
+removeBtn.addEventListener("click", function(){
+
+
+    inputImagen.value = "";
+
+    preview.src = "";
+
+    container.style.display = "none";
+
+
+});
+
+
+
+
+
+// ==========================
+// ELIMINAR IMAGEN ACTUAL
+// ==========================
+
+
+const removeCurrent = document.getElementById("remove-current");
+
+const imagenActual = document.getElementById("imagen-actual");
+
+const eliminarImagen = document.getElementById("eliminar_imagen");
+
+
+
+if(removeCurrent){
+
+
+removeCurrent.addEventListener("click", function(){
+
+
+    if(imagenActual){
+
+        imagenActual.style.display = "none";
+
+    }
+
+
+    eliminarImagen.value = "1";
+
+
+});
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
