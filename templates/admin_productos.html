@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Productos | Admin CrazyPrice</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+<aside>
+
+
+<h2>
+Crazy<span>Price</span>
+</h2>
+
+
+<a href="/admin">
+📊 Dashboard
+</a>
+
+
+<a href="/admin/productos" class="active">
+👕 Productos
+</a>
+
+
+<a href="/admin/usuarios">
+👥 Usuarios
+</a>
+
+
+<a href="/admin/pedidos">
+📦 Pedidos
+</a>
+
+
+<a href="/logout">
+🚪 Cerrar sesión
+</a>
+
+
+</aside>
+
+
+<section class="main">
+
+
+<h1>
+Gestión de Productos
+</h1>
+
+
+<p>
+Administra el catálogo de CrazyPrice
+</p>
+
+
+<div class="panel">
+
+
+<h2>
+Agregar producto
+</h2>
+
+
+<form method="POST" 
+action="/agregar_producto" 
+enctype="multipart/form-data">
+
+
+<input 
+type="text"
+name="nombre"
+placeholder="Nombre del producto"
+required>
+
+
+<input 
+type="text"
+name="descripcion"
+placeholder="Descripción">
+
+
+<input 
+type="number"
+name="precio"
+placeholder="Precio"
+required>
+
+
+<input 
+type="number"
+name="stock"
+placeholder="Cantidad disponible"
+required>
+
+
+<label for="genero">
+Género:
+</label>
+
+
+<select 
+name="genero" 
+id="genero" 
+required>
+
+<option value="">
+Seleccionar género
+</option>
+
+<option value="Caballero">
+Caballero
+</option>
+
+<option value="Dama">
+Dama
+</option>
+
+<option value="Niño">
+Niño
+</option>
+
+<option value="Niña">
+Niña
+</option>
+
+</select>
+
+
+<label>
+Imagen por URL:
+</label>
+
+
+<input 
+type="text"
+name="imagen"
+placeholder="https://ejemplo.com/imagen.jpg">
+
+
+<br><br>
+
+
+<label>
+Subir imagen desde PC:
+</label>
+
+
+<input 
+type="file"
+id="archivo"
+name="archivo"
+accept="image/*">
+
+
+<!-- Vista previa imagen -->
+
+<div id="preview-container" 
+style="display:none; position:relative; width:120px; margin-top:15px;">
+
+
+<img 
+id="preview"
+width="120"
+style="border-radius:10px;">
+
+
+<button 
+type="button"
+id="remove-image"
+style="
+position:absolute;
+top:-10px;
+right:-10px;
+border-radius:50%;
+background:red;
+color:white;
+border:none;
+width:25px;
+height:25px;
+cursor:pointer;
+">
+
+X
+
+</button>
+
+
+</div>
+
+
+<br>
+
+
+<button class="btn">
+Agregar producto
+</button>
+
+
+</form>
+
+
+</div>
+
+
+<div class="panel">
+
+
+<h2>
+Productos registrados
+</h2>
+
+
+<table>
+
+
+<tr>
+
+<th>
+Imagen
+</th>
+
+<th>
+Producto
+</th>
+
+<th>
+Precio
+</th>
+
+<th>
+Stock
+</th>
+
+<th>
+Acciones
+</th>
+
+</tr>
+
+
+{% for producto in productos %}
+
+
+<tr>
+
+
+<td>
+
+
+{% if producto.imagen.startswith('http') %}
+
+
+<img src="{{ producto.imagen }}" width="70">
+
+
+{% else %}
+
+
+<img src="{{ url_for('static', filename=producto.imagen) }}" width="70">
+
+
+{% endif %}
+
+
+</td>
+
+
+<td>
+
+{{ producto.nombre }}
+
+</td>
+
+
+<td>
+
+${{ producto.precio }}
+
+</td>
+
+
+<td>
+
+{{ producto.stock }}
+
+</td>
+
+
+<td>
+
+<a class="btn"
+href="/editar_producto/{{ producto.id }}">
+
+Editar
+
+</a>
+
+
+<a class="btn-delete"
+href="/eliminar_producto/{{ producto.id }}">
+
+Eliminar
+
+</a>
+
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+</table>
+
+
+</div>
+
+
+</section>
+
+
+</div>
+
+
+<script>
+
+
+const inputImagen = document.getElementById("archivo");
+
+const preview = document.getElementById("preview");
+
+const container = document.getElementById("preview-container");
+
+const removeBtn = document.getElementById("remove-image");
+
+
+inputImagen.addEventListener("change", function(){
+
+
+    const archivo = this.files[0];
+
+
+    if(archivo){
+
+
+        const lector = new FileReader();
+
+
+        lector.onload = function(e){
+
+            preview.src = e.target.result;
+
+            container.style.display = "block";
+
+        }
+
+
+        lector.readAsDataURL(archivo);
+
+    }
+
+});
+
+
+removeBtn.addEventListener("click", function(){
+
+
+    inputImagen.value = "";
+
+    preview.src = "";
+
+    container.style.display = "none";
+
+});
+
+
+</script>
+
+
+</body>
+
+</html>

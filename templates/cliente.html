@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+{% if genero_actual %}
+{{ genero_actual }} | CrazyPrice
+{% else %}
+Tienda | CrazyPrice
+{% endif %}
+</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<nav class="navbar">
+
+
+<h2>
+Crazy<span>Price</span>
+</h2>
+
+
+<div class="categories">
+
+
+<a href="/cliente"
+{% if not genero_actual %}class="active"{% endif %}>
+Inicio
+</a>
+
+
+<a href="/cliente/Caballero"
+{% if genero_actual == "Caballero" %}class="active"{% endif %}>
+Caballero
+</a>
+
+
+<a href="/cliente/Dama"
+{% if genero_actual == "Dama" %}class="active"{% endif %}>
+Dama
+</a>
+
+
+<a href="/cliente/Niño"
+{% if genero_actual == "Niño" %}class="active"{% endif %}>
+Niño
+</a>
+
+
+<a href="/cliente/Niña"
+{% if genero_actual == "Niña" %}class="active"{% endif %}>
+Niña
+</a>
+
+
+</div>
+
+
+<div class="navbar-right">
+
+
+<a href="/carrito">
+
+🛒 Carrito
+
+
+{% set cantidad_carrito = namespace(total=0) %}
+
+
+{% for item in carrito %}
+
+{% set cantidad_carrito.total = cantidad_carrito.total + item.cantidad %}
+
+{% endfor %}
+
+
+<span class="cart-count" id="cart-count">
+
+{{ cantidad_carrito.total }}
+
+</span>
+
+
+</a>
+
+
+<a href="/logout">
+
+Cerrar sesión
+
+</a>
+
+
+</div>
+
+
+</nav>
+
+
+{% with mensajes = get_flashed_messages(with_categories=true) %}
+
+
+{% if mensajes %}
+
+
+{% for categoria, mensaje in mensajes %}
+
+
+<div class="alert {{ categoria }}">
+
+{{ mensaje }}
+
+</div>
+
+
+{% endfor %}
+
+
+{% endif %}
+
+
+{% endwith %}
+
+
+<section class="shop">
+
+
+{% if genero_actual %}
+
+<h1>
+Productos de {{ genero_actual }}
+</h1>
+
+{% else %}
+
+<h1>
+Productos disponibles
+</h1>
+
+{% endif %}
+
+
+<div class="products">
+
+
+{% if productos %}
+
+
+{% for producto in productos %}
+
+
+<div class="product">
+
+
+<a href="/producto/{{ producto.id }}" class="product-link">
+
+
+{% if producto.imagen.startswith('http') %}
+
+
+<img 
+src="{{ producto.imagen }}" 
+alt="{{ producto.nombre }}">
+
+
+{% else %}
+
+
+<img 
+src="{{ url_for('static', filename=producto.imagen) }}" 
+alt="{{ producto.nombre }}">
+
+
+{% endif %}
+
+
+<h3>
+
+{{ producto.nombre }}
+
+</h3>
+
+
+<p>
+
+{{ producto.descripcion }}
+
+</p>
+
+
+<h2>
+
+${{ producto.precio|int }}
+
+</h2>
+
+
+<p>
+
+Stock:
+{{ producto.stock }}
+
+</p>
+
+
+</a>
+
+
+<form method="POST" action="/agregar_carrito?origen=cliente{% if genero_actual %}&genero={{ genero_actual }}{% endif %}">
+
+
+<input
+type="hidden"
+name="id"
+value="{{ producto.id }}">
+
+
+<input
+type="hidden"
+name="producto"
+value="{{ producto.nombre }}">
+
+
+<input
+type="hidden"
+name="precio"
+value="{{ producto.precio }}">
+
+
+<input
+type="hidden"
+name="imagen"
+value="{{ producto.imagen }}">
+
+
+<input
+type="number"
+name="cantidad"
+value="1"
+min="1"
+max="{{ producto.stock }}"
+required>
+
+
+<button class="btn">
+
+🛒 Agregar al carrito
+
+</button>
+
+
+</form>
+
+
+</div>
+
+
+{% endfor %}
+
+
+{% else %}
+
+
+<div class="empty-category">
+
+<h2>
+No hay productos disponibles
+</h2>
+
+<p>
+Actualmente no tenemos productos en esta categoría.
+</p>
+
+</div>
+
+
+{% endif %}
+
+
+</div>
+
+
+</section>
+
+
+</body>
+
+</html>

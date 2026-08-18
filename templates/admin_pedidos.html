@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Pedidos | Admin CrazyPrice</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+<aside>
+
+<h2>
+Crazy<span>Price</span>
+</h2>
+
+<a href="/admin">
+📊 Dashboard
+</a>
+
+<a href="/admin/productos">
+👕 Productos
+</a>
+
+<a href="/admin/usuarios">
+👥 Usuarios
+</a>
+
+<a href="/admin/pedidos" class="active">
+📦 Pedidos
+</a>
+
+<a href="/logout">
+🚪 Cerrar sesión
+</a>
+
+</aside>
+
+
+
+
+<section class="main">
+
+
+<h1>
+Gestión de Pedidos
+</h1>
+
+
+<p>
+Controla los pedidos realizados por los clientes
+</p>
+
+
+
+
+
+<div class="panel">
+
+
+<h2>
+Pedidos realizados
+</h2>
+
+
+
+<table>
+
+<tr>
+
+<th>
+Cliente
+</th>
+
+<th>
+Producto
+</th>
+
+<th>
+Cantidad
+</th>
+
+<th>
+Total
+</th>
+
+<th>
+Estado
+</th>
+
+<th>
+Acciones
+</th>
+
+</tr>
+
+
+
+
+{% for pedido in pedidos %}
+
+
+{% if pedido.estado != "Entregado" %}
+
+
+<tr>
+
+
+<td>
+{{ pedido.cliente }}
+</td>
+
+
+<td>
+{{ pedido.producto }}
+</td>
+
+
+<td>
+{{ pedido.cantidad }}
+</td>
+
+
+<td>
+${{ pedido.total }}
+</td>
+
+
+<td>
+
+{% if pedido.estado == "Pendiente" %}
+
+🟡 Pendiente
+
+{% elif pedido.estado == "Procesando" %}
+
+🔵 Procesando
+
+{% elif pedido.estado == "Enviado" %}
+
+🟣 Enviado
+
+{% endif %}
+
+</td>
+
+
+
+
+<td>
+
+
+{% if pedido.estado == "Pendiente" %}
+
+
+<a class="btn btn-procesar"
+href="/estado_pedido/{{ pedido.id }}/Procesando">
+
+Procesar
+
+</a>
+
+
+<button class="btn btn-disabled" disabled>
+
+Enviar
+
+</button>
+
+
+<button class="btn btn-disabled" disabled>
+
+Finalizar
+
+</button>
+
+
+
+
+{% elif pedido.estado == "Procesando" %}
+
+
+<button class="btn btn-disabled" disabled>
+
+Procesar
+
+</button>
+
+
+<a class="btn btn-enviar"
+href="/estado_pedido/{{ pedido.id }}/Enviado">
+
+Enviar
+
+</a>
+
+
+<button class="btn btn-disabled" disabled>
+
+Finalizar
+
+</button>
+
+
+
+
+{% elif pedido.estado == "Enviado" %}
+
+
+<button class="btn btn-disabled" disabled>
+
+Procesar
+
+</button>
+
+
+<button class="btn btn-disabled" disabled>
+
+Enviar
+
+</button>
+
+
+<a class="btn btn-finalizar"
+href="/estado_pedido/{{ pedido.id }}/Entregado">
+
+Finalizar
+
+</a>
+
+
+{% endif %}
+
+
+</td>
+
+
+</tr>
+
+
+{% endif %}
+
+
+{% endfor %}
+
+
+
+</table>
+
+
+</div>
+
+
+
+
+
+<div class="panel">
+
+
+<h2>
+Historial de pedidos entregados
+</h2>
+
+
+
+<table>
+
+
+<tr>
+
+
+<th>
+Cliente
+</th>
+
+
+<th>
+Producto
+</th>
+
+
+<th>
+Cantidad
+</th>
+
+
+<th>
+Total
+</th>
+
+
+<th>
+Estado
+</th>
+
+
+</tr>
+
+
+
+{% for pedido in pedidos %}
+
+
+{% if pedido.estado == "Entregado" %}
+
+
+<tr>
+
+
+<td>
+{{ pedido.cliente }}
+</td>
+
+
+<td>
+{{ pedido.producto }}
+</td>
+
+
+<td>
+{{ pedido.cantidad }}
+</td>
+
+
+<td>
+${{ pedido.total }}
+</td>
+
+
+<td>
+🟢 Entregado
+</td>
+
+
+</tr>
+
+
+{% endif %}
+
+
+{% endfor %}
+
+
+
+</table>
+
+
+</div>
+
+
+
+
+
+</section>
+
+
+</div>
+
+
+</body>
+
+</html>

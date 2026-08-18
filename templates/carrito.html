@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Carrito | CrazyPrice</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<nav class="navbar">
+
+
+<h2>
+Crazy<span>Price</span>
+</h2>
+
+
+
+<div class="carrito-links">
+
+
+<a href="/cliente">
+Seguir comprando
+</a>
+
+
+
+<a href="/logout">
+Cerrar sesión
+</a>
+
+
+
+</div>
+
+
+</nav>
+
+
+
+
+
+<section class="shop">
+
+
+<h1>
+Carrito de compras
+</h1>
+
+
+
+
+
+{% if carrito %}
+
+
+
+<div class="panel">
+
+
+
+<table>
+
+
+<tr>
+
+<th>
+Imagen
+</th>
+
+
+<th>
+Producto
+</th>
+
+
+<th>
+Precio
+</th>
+
+
+<th>
+Cantidad
+</th>
+
+
+<th>
+Subtotal
+</th>
+
+
+<th>
+Acción
+</th>
+
+
+</tr>
+
+
+
+
+
+{% for item in carrito %}
+
+
+
+<tr>
+
+
+<td>
+
+
+{% if item.imagen is defined %}
+
+
+    {% if item.imagen.startswith('http') %}
+
+
+    <img 
+    src="{{ item.imagen }}"
+    width="80">
+
+
+    {% else %}
+
+
+    <img 
+    src="{{ url_for('static', filename=item.imagen) }}"
+    width="80">
+
+
+    {% endif %}
+
+
+
+{% else %}
+
+
+<img 
+src="{{ url_for('static', filename='img/default.png') }}"
+width="80">
+
+
+{% endif %}
+
+
+
+</td>
+
+
+
+
+
+<td>
+
+{{ item.producto }}
+
+</td>
+
+
+
+
+
+<td>
+
+${{ "%.2f"|format(item.precio) }}
+
+</td>
+
+
+
+
+
+<td>
+
+{{ item.cantidad }}
+
+</td>
+
+
+
+
+
+<td>
+
+${{ "%.2f"|format(item.precio * item.cantidad) }}
+
+</td>
+
+
+
+
+
+<td>
+
+
+<a class="btn-delete"
+href="/eliminar_carrito/{{ loop.index0 }}">
+
+Eliminar
+
+</a>
+
+
+</td>
+
+
+
+</tr>
+
+
+
+{% endfor %}
+
+
+
+
+
+
+</table>
+
+
+
+
+
+<br>
+
+
+<h2>
+
+Total:
+${{ "{:,.2f}".format(total) }}
+
+</h2>
+
+
+
+
+
+<br>
+
+
+
+<a class="btn"
+href="/vaciar_carrito">
+
+Vaciar carrito
+
+</a>
+
+
+
+<a class="btn"
+href="/confirmar_compra">
+
+Confirmar compra
+
+</a>
+
+
+
+</div>
+
+
+
+
+
+{% else %}
+
+
+
+<h2>
+Tu carrito está vacío.
+</h2>
+
+
+
+<a class="btn"
+href="/cliente">
+
+Volver a la tienda
+
+</a>
+
+
+
+{% endif %}
+
+
+
+
+
+
+</section>
+
+
+
+</body>
+
+</html>

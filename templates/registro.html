@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Registro | CrazyPrice</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<div class="auth-container">
+
+
+<div class="auth-box">
+
+
+<h1>
+Crazy<span>Price</span>
+</h1>
+
+
+<h2>
+Crear cuenta
+</h2>
+
+
+
+<form method="POST" action="/registro">
+
+
+<input
+
+type="text"
+
+name="nombre"
+
+placeholder="Nombre completo"
+
+required>
+
+
+
+
+<input
+
+type="text"
+
+name="usuario"
+
+placeholder="Usuario"
+
+required>
+
+
+
+
+<input
+
+type="password"
+
+name="password"
+
+placeholder="Contraseña"
+
+required>
+
+
+
+
+<button class="btn">
+
+Registrarme
+
+</button>
+
+
+
+</form>
+
+
+
+
+<p>
+
+¿Ya tienes cuenta?
+
+<a href="/login">
+
+Iniciar sesión
+
+</a>
+
+</p>
+
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+
+</html>
