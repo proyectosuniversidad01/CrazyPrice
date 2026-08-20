@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
+import bcrypt
 
 
 app = Flask(__name__)
@@ -124,12 +125,14 @@ def inicio():
 # REGISTRO CLIENTE
 # ==========================
 
+# ==========================
+# REGISTRO
+# ==========================
+
 @app.route("/registro", methods=["GET","POST"])
 def registro():
 
-
     if request.method == "POST":
-
 
         nombre = request.form["nombre"]
 
@@ -138,17 +141,24 @@ def registro():
         password = request.form["password"]
 
 
-
         existe = Usuario.query.filter_by(
             usuario=usuario
         ).first()
-
 
 
         if existe:
 
             return "El usuario ya existe"
 
+
+        # ==========================
+        # HASH DE CONTRASEÑA CON BCRYPT
+        # ==========================
+
+        password_hash = bcrypt.hashpw(
+            password.encode("utf-8"),
+            bcrypt.gensalt()
+        ).decode("utf-8")
 
 
         nuevo_usuario = Usuario(
@@ -157,12 +167,11 @@ def registro():
 
             usuario=usuario,
 
-            password=generate_password_hash(password),
+            password=password_hash,
 
             rol="cliente"
 
         )
-
 
 
         db.session.add(nuevo_usuario)
@@ -170,9 +179,7 @@ def registro():
         db.session.commit()
 
 
-
         return redirect("/login")
-
 
 
     return render_template("registro.html")
@@ -187,17 +194,18 @@ def registro():
 # LOGIN
 # ==========================
 
+# ==========================
+# LOGIN
+# ==========================
+
 @app.route("/login", methods=["GET","POST"])
 def login():
 
-
     if request.method == "POST":
-
 
         usuario = request.form["usuario"]
 
         password = request.form["password"]
-
 
 
         user = Usuario.query.filter_by(
@@ -205,33 +213,35 @@ def login():
         ).first()
 
 
+        if user:
 
-        if user and check_password_hash(
-            user.password,
-            password
-        ):
+            password_correcta = bcrypt.checkpw(
+                password.encode("utf-8"),
+                user.password.encode("utf-8")
+            )
+
+        else:
+
+            password_correcta = False
 
 
+        if password_correcta:
 
             session["usuario"] = user.usuario
 
             session["rol"] = user.rol
 
 
-
             if user.rol == "admin":
 
                 return redirect("/admin")
-
 
             else:
 
                 return redirect("/cliente")
 
 
-
         return "Usuario o contraseña incorrectos"
-
 
 
     return render_template("login.html")
@@ -1104,4 +1114,4 @@ with app.app_context():
 
 if __name__ == "__main__":
 
-    app.run(debug=True)
+    app.run()
